@@ -1,0 +1,7 @@
+
+*.out
+a.out
+*.o
+*.exe
+.vscode/
+.cph/
