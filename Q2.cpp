@@ -22,8 +22,9 @@ Node* root;
 
 // Update subtree size
 void update(Node* x) {
-    if (x != NIL)
+    if (x != NIL) {
         x->size = 1 + x->left->size + x->right->size;
+    }
 }
 
 void updateUp(Node* x) {
@@ -38,17 +39,19 @@ void leftRotate(Node* x) {
     Node* y = x->right;
     x->right = y->left;
 
-    if (y->left != NIL)
+    if (y->left != NIL) {
         y->left->parent = x;
+    }
 
     y->parent = x->parent;
 
-    if (x->parent == NIL)
+    if (x->parent == NIL) {
         root = y;
-    else if (x == x->parent->left)
+    } else if (x == x->parent->left) {
         x->parent->left = y;
-    else
+    } else {
         x->parent->right = y;
+    }
 
     y->left = x;
     x->parent = y;
@@ -62,17 +65,19 @@ void rightRotate(Node* y) {
     Node* x = y->left;
     y->left = x->right;
 
-    if (x->right != NIL)
+    if (x->right != NIL) {
         x->right->parent = y;
+    }
 
     x->parent = y->parent;
 
-    if (y->parent == NIL)
+    if (y->parent == NIL) {
         root = x;
-    else if (y == y->parent->left)
+    } else if (y == y->parent->left) {
         y->parent->left = x;
-    else
+    } else {
         y->parent->right = x;
+    }
 
     x->right = y;
     y->parent = x;
@@ -85,13 +90,15 @@ Node* search(ll key) {
     Node* cur = root;
 
     while (cur != NIL) {
-        if (cur->key == key)
+        if (cur->key == key) {
             return cur;
+        }
 
-        if (key < cur->key)
+        if (key < cur->key) {
             cur = cur->left;
-        else
+        } else {
             cur = cur->right;
+        }
     }
 
     return NIL;
@@ -143,8 +150,9 @@ void insertFix(Node* z) {
 }
 
 bool insertKey(ll key) {
-    if (search(key) != NIL)
+    if (search(key) != NIL) {
         return false;
+    }
 
     Node* z = new Node(key, true);
     z->left = z->right = NIL;
@@ -155,20 +163,22 @@ bool insertKey(ll key) {
     while (x != NIL) {
         y = x;
 
-        if (key < x->key)
+        if (key < x->key) {
             x = x->left;
-        else
+        } else {
             x = x->right;
+        }
     }
 
     z->parent = y;
 
-    if (y == NIL)
+    if (y == NIL) {
         root = z;
-    else if (key < y->key)
+    } else if (key < y->key) {
         y->left = z;
-    else
+    } else {
         y->right = z;
+    }
 
     updateUp(y);
     insertFix(z);
@@ -178,19 +188,21 @@ bool insertKey(ll key) {
 
 // Replace one subtree with another
 void transplant(Node* u, Node* v) {
-    if (u->parent == NIL)
+    if (u->parent == NIL) {
         root = v;
-    else if (u == u->parent->left)
+    } else if (u == u->parent->left) {
         u->parent->left = v;
-    else
+    } else {
         u->parent->right = v;
+    }
 
     v->parent = u->parent;
 }
 
 Node* minimum(Node* x) {
-    while (x->left != NIL)
+    while (x->left != NIL) {
         x = x->left;
+    }
 
     return x;
 }
@@ -261,8 +273,9 @@ void deleteFix(Node* x) {
 bool deleteKey(ll key) {
     Node* z = search(key);
 
-    if (z == NIL)
+    if (z == NIL) {
         return false;
+    }
 
     Node* y = z;
     Node* x;
@@ -309,8 +322,9 @@ bool deleteKey(ll key) {
 
     delete z;
 
-    if (!originalRed)
+    if (!originalRed) {
         deleteFix(x);
+    }
 
     // Rotations preserve subtree totals; refresh affected ancestors
     updateUp(x == NIL ? x->parent : x);
@@ -325,12 +339,13 @@ ll kthSmallest(int k) {
     while (cur != NIL) {
         int leftSize = cur->left->size;
 
-        if (k == leftSize + 1)
+        if (k == leftSize + 1) {
             return cur->key;
+        }
 
-        if (k <= leftSize)
+        if (k <= leftSize) {
             cur = cur->left;
-        else {
+        } else {
             k -= leftSize + 1;
             cur = cur->right;
         }
@@ -383,17 +398,17 @@ int main() {
         cin >> type >> x;
 
         if (type == 1) {
-            if (insertKey(x))
+            if (insertKey(x)) {
                 cout << x << " is inserted\n";
-            else
-                cout << x
-                     << " is already present. So no need to insert\n";
+            } else {
+                cout << x << " is already present. So no need to insert\n";
+            }
         } else if (type == 2) {
-            if (deleteKey(x))
+            if (deleteKey(x)) {
                 cout << x << " is deleted\n";
-            else
-                cout << x
-                     << " is not present. So it can not be deleted\n";
+            } else {
+                cout << x << " is not present. So it can not be deleted\n";
+            }
         } else if (type == 3) {
             cout << kthSmallest((int)x) << '\n';
         } else if (type == 4) {

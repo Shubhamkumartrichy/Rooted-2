@@ -5,15 +5,17 @@ using namespace std;
 
 // Convert a signed literal into a graph vertex
 int literal(int x, int n) {
-    if (x > 0)
+    if (x > 0) {
         return x - 1;
+    }
     return n + (-x) - 1;
 }
 
 // Return the vertex representing the negation
 int neg(int x, int n) {
-    if (x < n)
+    if (x < n) {
         return x + n;
+    }
     return x - n;
 }
 
@@ -95,8 +97,9 @@ int main() {
         vector<int> order;
 
         for (int i = 0; i < V; i++) {
-            if (!vis[i])
+            if (!vis[i]) {
                 dfs1(i, g, vis, order);
+            }
         }
 
         reverse(order.begin(), order.end());
@@ -105,8 +108,9 @@ int main() {
         int id = 0;
 
         for (int u : order) {
-            if (comp[u] == -1)
+            if (comp[u] == -1) {
                 dfs2(u, rg, comp, id++);
+            }
         }
 
         vector<int> ans(n);
@@ -126,8 +130,9 @@ int main() {
             cout << "Unsatisfiable\n";
         } else {
             for (int i = 0; i < n; i++) {
-                if (i > 0)
+                if (i > 0) {
                     cout << ' ';
+                }
                 cout << ans[i];
             }
             cout << '\n';

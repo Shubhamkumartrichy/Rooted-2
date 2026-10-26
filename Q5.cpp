@@ -23,8 +23,9 @@ vector<ll> dijkstra(int source, const Graph& adj) {
         auto [d, u] = pq.top();
         pq.pop();
 
-        if (d != dist[u])
+        if (d != dist[u]) {
             continue;
+        }
 
         for (auto [v, w] : adj[u]) {
             if (d + w < dist[v]) {

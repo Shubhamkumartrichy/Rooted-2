@@ -23,17 +23,19 @@ void leftRotate(Node* x) {
     Node* y = x->right;
     x->right = y->left;
 
-    if (y->left != NIL)
+    if (y->left != NIL) {
         y->left->parent = x;
+    }
 
     y->parent = x->parent;
 
-    if (x->parent == NIL)
+    if (x->parent == NIL) {
         root = y;
-    else if (x == x->parent->left)
+    } else if (x == x->parent->left) {
         x->parent->left = y;
-    else
+    } else {
         x->parent->right = y;
+    }
 
     y->left = x;
     x->parent = y;
@@ -44,17 +46,19 @@ void rightRotate(Node* y) {
     Node* x = y->left;
     y->left = x->right;
 
-    if (x->right != NIL)
+    if (x->right != NIL) {
         x->right->parent = y;
+    }
 
     x->parent = y->parent;
 
-    if (y->parent == NIL)
+    if (y->parent == NIL) {
         root = x;
-    else if (y == y->parent->left)
+    } else if (y == y->parent->left) {
         y->parent->left = x;
-    else
+    } else {
         y->parent->right = x;
+    }
 
     x->right = y;
     y->parent = x;
@@ -116,11 +120,11 @@ void insertKey(ll key) {
     while (x != NIL) {
         y = x;
 
-        if (key < x->key)
+        if (key < x->key) {
             x = x->left;
-        else if (key > x->key)
+        } else if (key > x->key) {
             x = x->right;
-        else {
+        } else {
             delete z;
             return;
         }
@@ -128,35 +132,40 @@ void insertKey(ll key) {
 
     z->parent = y;
 
-    if (y == NIL)
+    if (y == NIL) {
         root = z;
-    else if (key < y->key)
+    } else if (key < y->key) {
         y->left = z;
-    else
+    } else {
         y->right = z;
+    }
 
     insertFix(z);
 }
 
 // Print keys in [a, b] in increasing order
 void enumerate(Node* node, ll a, ll b, bool& first) {
-    if (node == NIL)
+    if (node == NIL) {
         return;
+    }
 
     // Left subtree can contain keys >= a only if node->key > a
-    if (node->key > a)
+    if (node->key > a) {
         enumerate(node->left, a, b, first);
+    }
 
     if (a <= node->key && node->key <= b) {
-        if (!first)
+        if (!first) {
             cout << ' ';
+        }
         cout << node->key;
         first = false;
     }
 
     // Right subtree can contain keys <= b only if node->key < b
-    if (node->key < b)
+    if (node->key < b) {
         enumerate(node->right, a, b, first);
+    }
 }
 
 int main() {
@@ -186,8 +195,9 @@ int main() {
         bool first = true;
         enumerate(root, a, b, first);
 
-        if (first)
+        if (first) {
             cout << "EMPTY";
+        }
 
         cout << '\n';
     }

@@ -22,19 +22,19 @@ BTreeNode* root = nullptr;
 
 // Search for a key in the B-tree
 bool search(BTreeNode* node, ll key) {
-    if (node == nullptr)
+    if (node == nullptr) {
         return false;
+    }
 
-    int i = lower_bound(node->keys.begin(),
-                        node->keys.end(), key) -
-            node->keys.begin();
+    int i = lower_bound(node->keys.begin(), node->keys.end(), key) - node->keys.begin();
 
-    if (i < (int)node->keys.size() &&
-        node->keys[i] == key)
+    if (i < (int)node->keys.size() && node->keys[i] == key) {
         return true;
+    }
 
-    if (node->isLeaf())
+    if (node->isLeaf()) {
         return false;
+    }
 
     return search(node->children[i], key);
 }
@@ -46,8 +46,7 @@ void splitChild(BTreeNode* parent, int idx) {
 
     ll middle = y->keys[MIN_KEYS];
 
-    z->keys.assign(y->keys.begin() + MIN_KEYS + 1,
-                   y->keys.end());
+    z->keys.assign(y->keys.begin() + MIN_KEYS + 1, y->keys.end());
 
     y->keys.resize(MIN_KEYS);
 
@@ -60,8 +59,9 @@ void splitChild(BTreeNode* parent, int idx) {
 
     int oldSize = parent->keys.size();
 
-    for (int j = oldSize; j >= idx + 1; j--)
+    for (int j = oldSize; j >= idx + 1; j--) {
         parent->children[j + 1] = parent->children[j];
+    }
 
     parent->children[idx + 1] = z;
 
@@ -73,24 +73,22 @@ void insertNonFull(BTreeNode* node, ll key) {
     int i = (int)node->keys.size() - 1;
 
     if (node->isLeaf()) {
-        node->keys.insert(
-            upper_bound(node->keys.begin(),
-                        node->keys.end(), key),
-            key
-        );
+        node->keys.insert(upper_bound(node->keys.begin(), node->keys.end(), key), key);
         return;
     }
 
-    while (i >= 0 && key < node->keys[i])
+    while (i >= 0 && key < node->keys[i]) {
         i--;
+    }
 
     i++;
 
     if ((int)node->children[i]->keys.size() == MAX_KEYS) {
         splitChild(node, i);
 
-        if (key > node->keys[i])
+        if (key > node->keys[i]) {
             i++;
+        }
     }
 
     insertNonFull(node->children[i], key);
@@ -98,8 +96,9 @@ void insertNonFull(BTreeNode* node, ll key) {
 
 // Top-down insertion
 void insertKey(ll key) {
-    if (search(root, key))
+    if (search(root, key)) {
         return;
+    }
 
     if (root == nullptr) {
         root = new BTreeNode();
@@ -122,8 +121,9 @@ void insertKey(ll key) {
 ll getPredecessor(BTreeNode* node, int idx) {
     BTreeNode* cur = node->children[idx];
 
-    while (!cur->isLeaf())
+    while (!cur->isLeaf()) {
         cur = cur->children[cur->keys.size()];
+    }
 
     return cur->keys.back();
 }
@@ -132,8 +132,9 @@ ll getPredecessor(BTreeNode* node, int idx) {
 ll getSuccessor(BTreeNode* node, int idx) {
     BTreeNode* cur = node->children[idx + 1];
 
-    while (!cur->isLeaf())
+    while (!cur->isLeaf()) {
         cur = cur->children[0];
+    }
 
     return cur->keys[0];
 }
@@ -143,8 +144,7 @@ void borrowFromPrev(BTreeNode* node, int idx) {
     BTreeNode* child = node->children[idx];
     BTreeNode* sibling = node->children[idx - 1];
 
-    child->keys.insert(child->keys.begin(),
-                       node->keys[idx - 1]);
+    child->keys.insert(child->keys.begin(), node->keys[idx - 1]);
 
     node->keys[idx - 1] = sibling->keys.back();
     sibling->keys.pop_back();
@@ -152,11 +152,11 @@ void borrowFromPrev(BTreeNode* node, int idx) {
     if (!sibling->isLeaf()) {
         int oldSize = child->keys.size() - 1;
 
-        for (int j = oldSize; j >= 0; j--)
+        for (int j = oldSize; j >= 0; j--) {
             child->children[j + 1] = child->children[j];
+        }
 
-        child->children[0] =
-            sibling->children[sibling->keys.size() + 1];
+        child->children[0] = sibling->children[sibling->keys.size() + 1];
 
         sibling->children[sibling->keys.size() + 1] = nullptr;
     }
@@ -175,11 +175,11 @@ void borrowFromNext(BTreeNode* node, int idx) {
     sibling->keys.erase(sibling->keys.begin());
 
     if (!sibling->isLeaf()) {
-        child->children[child->keys.size()] =
-            sibling->children[0];
+        child->children[child->keys.size()] = sibling->children[0];
 
-        for (int j = 0; j < oldSize; j++)
+        for (int j = 0; j < oldSize; j++) {
             sibling->children[j] = sibling->children[j + 1];
+        }
 
         sibling->children[oldSize] = nullptr;
     }
@@ -194,21 +194,23 @@ void mergeChildren(BTreeNode* node, int idx) {
 
     child->keys.push_back(node->keys[idx]);
 
-    for (ll key : sibling->keys)
+    for (ll key : sibling->keys) {
         child->keys.push_back(key);
+    }
 
     if (!sibling->isLeaf()) {
-        for (int j = 0; j <= (int)sibling->keys.size(); j++)
-            child->children[oldSize + 1 + j] =
-                sibling->children[j];
+        for (int j = 0; j <= (int)sibling->keys.size(); j++) {
+            child->children[oldSize + 1 + j] = sibling->children[j];
+        }
     }
 
     node->keys.erase(node->keys.begin() + idx);
 
     int parentSize = node->keys.size();
 
-    for (int j = idx + 1; j <= parentSize; j++)
+    for (int j = idx + 1; j <= parentSize; j++) {
         node->children[j] = node->children[j + 1];
+    }
 
     node->children[parentSize + 1] = nullptr;
 
@@ -217,11 +219,9 @@ void mergeChildren(BTreeNode* node, int idx) {
 
 // Ensure child idx has more than MIN_KEYS before descending
 void fillChild(BTreeNode* node, int idx) {
-    if (idx > 0 &&
-        (int)node->children[idx - 1]->keys.size() > MIN_KEYS) {
+    if (idx > 0 && (int)node->children[idx - 1]->keys.size() > MIN_KEYS) {
         borrowFromPrev(node, idx);
-    } else if (idx < (int)node->keys.size() &&
-               (int)node->children[idx + 1]->keys.size() > MIN_KEYS) {
+    } else if (idx < (int)node->keys.size() && (int)node->children[idx + 1]->keys.size() > MIN_KEYS) {
         borrowFromNext(node, idx);
     } else if (idx < (int)node->keys.size()) {
         mergeChildren(node, idx);
@@ -232,12 +232,9 @@ void fillChild(BTreeNode* node, int idx) {
 
 // Delete a key from a subtree where top-down rules are followed
 void removeKey(BTreeNode* node, ll key) {
-    int idx = lower_bound(node->keys.begin(),
-                          node->keys.end(), key) -
-              node->keys.begin();
+    int idx = lower_bound(node->keys.begin(), node->keys.end(), key) - node->keys.begin();
 
-    if (idx < (int)node->keys.size() &&
-        node->keys[idx] == key) {
+    if (idx < (int)node->keys.size() && node->keys[idx] == key) {
 
         if (node->isLeaf()) {
             node->keys.erase(node->keys.begin() + idx);
@@ -263,8 +260,9 @@ void removeKey(BTreeNode* node, ll key) {
         return;
     }
 
-    if (node->isLeaf())
+    if (node->isLeaf()) {
         return;
+    }
 
     // Prepare the child before descending into it
     bool lastChild = (idx == (int)node->keys.size());
@@ -272,8 +270,9 @@ void removeKey(BTreeNode* node, ll key) {
     if ((int)node->children[idx]->keys.size() == MIN_KEYS) {
         fillChild(node, idx);
 
-        if (lastChild && idx > (int)node->keys.size())
+        if (lastChild && idx > (int)node->keys.size()) {
             idx--;
+        }
     }
 
     removeKey(node->children[idx], key);
@@ -281,8 +280,9 @@ void removeKey(BTreeNode* node, ll key) {
 
 // Top-down deletion
 bool deleteKey(ll key) {
-    if (!search(root, key))
+    if (!search(root, key)) {
         return false;
+    }
 
     removeKey(root, key);
 
@@ -290,10 +290,11 @@ bool deleteKey(ll key) {
     if (root->keys.empty()) {
         BTreeNode* oldRoot = root;
 
-        if (root->isLeaf())
+        if (root->isLeaf()) {
             root = nullptr;
-        else
+        } else {
             root = root->children[0];
+        }
 
         delete oldRoot;
     }
@@ -318,18 +319,21 @@ void display() {
             BTreeNode* node = q.front();
             q.pop();
 
-            if (i > 0)
+            if (i > 0) {
                 cout << ' ';
+            }
 
             for (int j = 0; j < (int)node->keys.size(); j++) {
-                if (j > 0)
+                if (j > 0) {
                     cout << ',';
+                }
                 cout << node->keys[j];
             }
 
             if (!node->isLeaf()) {
-                for (int j = 0; j <= (int)node->keys.size(); j++)
+                for (int j = 0; j <= (int)node->keys.size(); j++) {
                     q.push(node->children[j]);
+                }
             }
         }
 
@@ -362,10 +366,11 @@ int main() {
             ll x;
             cin >> x;
 
-            if (search(root, x))
+            if (search(root, x)) {
                 cout << x << " is present\n";
-            else
+            } else {
                 cout << x << " is not present\n";
+            }
 
         } else if (type == 2) {
             ll x;
@@ -382,11 +387,11 @@ int main() {
             ll x;
             cin >> x;
 
-            if (deleteKey(x))
+            if (deleteKey(x)) {
                 cout << x << " is deleted\n";
-            else
-                cout << x
-                     << " is not present. So it can not be deleted\n";
+            } else {
+                cout << x << " is not present. So it can not be deleted\n";
+            }
 
         } else if (type == 4) {
             display();

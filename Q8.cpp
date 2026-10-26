@@ -31,17 +31,20 @@ int main() {
     for (int i = 0; i < N + M - 1; i++) {
         char c = S[i % N];
 
-        while (j > 0 && c != P[j])
+        while (j > 0 && c != P[j]) {
             j = lps[j - 1];
+        }
 
-        if (c == P[j])
+        if (c == P[j]) {
             j++;
+        }
 
         if (j == M) {
             int start = i - M + 1;
 
-            if (start < N)
+            if (start < N) {
                 matches.push_back(start);
+            }
 
             j = lps[j - 1];
         }
@@ -51,8 +54,9 @@ int main() {
 
     if (!matches.empty()) {
         for (int i = 0; i < (int)matches.size(); i++) {
-            if (i > 0)
+            if (i > 0) {
                 cout << ' ';
+            }
             cout << matches[i];
         }
         cout << '\n';

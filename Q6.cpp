@@ -14,8 +14,9 @@ struct DSU {
     }
 
     int find(int x) {
-        if (parent[x] != x)
+        if (parent[x] != x) {
             parent[x] = find(parent[x]);
+        }
         return parent[x];
     }
 
@@ -23,11 +24,13 @@ struct DSU {
         a = find(a);
         b = find(b);
 
-        if (a == b)
+        if (a == b) {
             return false;
+        }
 
-        if (sz[a] < sz[b])
+        if (sz[a] < sz[b]) {
             swap(a, b);
+        }
 
         parent[b] = a;
         sz[a] += sz[b];
@@ -71,8 +74,9 @@ int main() {
             total += cost;
             used++;
 
-            if (used == N)
+            if (used == N) {
                 break;
+            }
         }
     }
 

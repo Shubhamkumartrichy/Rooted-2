@@ -10,8 +10,9 @@ const double PI = acos(-1.0);
 vector<cd> fft(vector<cd> a) {
     int n = a.size();
 
-    if (n == 1)
+    if (n == 1) {
         return a;
+    }
 
     vector<cd> ae(n / 2), ao(n / 2);
 
@@ -44,45 +45,54 @@ int main() {
 
     vector<ll> a(n), b(m);
 
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < n; i++) {
         cin >> a[i];
+    }
 
-    for (int i = 0; i < m; i++)
+    for (int i = 0; i < m; i++) {
         cin >> b[i];
+    }
 
     // Pad to the smallest power of two >= n + m - 1
     int L = 1;
-    while (L < n + m - 1)
+    while (L < n + m - 1) {
         L *= 2;
+    }
 
     vector<cd> A(L), B(L);
 
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < n; i++) {
         A[i] = a[i];
+    }
 
-    for (int i = 0; i < m; i++)
+    for (int i = 0; i < m; i++) {
         B[i] = b[i];
+    }
 
     A = fft(A);
     B = fft(B);
 
     // Multiply corresponding FFT values
-    for (int i = 0; i < L; i++)
+    for (int i = 0; i < L; i++) {
         A[i] *= B[i];
+    }
 
     // Inverse FFT using conjugation
-    for (cd& x : A)
+    for (cd& x : A) {
         x = conj(x);
+    }
 
     A = fft(A);
 
-    for (cd& x : A)
+    for (cd& x : A) {
         x = conj(x) / (double)L;
+    }
 
     // Print the required integer coefficients
     for (int i = 0; i < n + m - 1; i++) {
-        if (i > 0)
+        if (i > 0) {
             cout << ' ';
+        }
         cout << llround(A[i].real());
     }
 
