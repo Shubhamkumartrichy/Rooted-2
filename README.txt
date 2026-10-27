@@ -1,10 +1,74 @@
+Assignment: Q1–Q9
+
+Name: Shubham Kumar
+Roll Number: CS26MTECH12012
+Operating System: Ubuntu Linux
+Programming Language: C++
+Compiler: g++
+Compiler Version: g++ (Ubuntu 15.2.0-16ubuntu1) 15.2.0
+
+
+COMPILATION AND EXECUTION
+----------------------------
+
+Compile each program separately using g++ and the C++17 standard.
+
+Q1:
+    g++ -std=c++17 -O2 -Wall -Wextra -pedantic Q1.cpp -o Q1
+    ./Q1
+
+Q2:
+    g++ -std=c++17 -O2 -Wall -Wextra -pedantic Q2.cpp -o Q2
+    ./Q2
+
+Q3:
+    g++ -std=c++17 -O2 -Wall -Wextra -pedantic Q3.cpp -o Q3
+    ./Q3
+
+Q4:
+    g++ -std=c++17 -O2 -Wall -Wextra -pedantic Q4.cpp -o Q4
+    ./Q4
+
+Q5:
+    g++ -std=c++17 -O2 -Wall -Wextra -pedantic Q5.cpp -o Q5
+    ./Q5
+
+Q6:
+    g++ -std=c++17 -O2 -Wall -Wextra -pedantic Q6.cpp -o Q6
+    ./Q6
+
+Q7:
+    g++ -std=c++17 -O2 -Wall -Wextra -pedantic Q7.cpp -o Q7
+    ./Q7
+
+Q8:
+    g++ -std=c++17 -O2 -Wall -Wextra -pedantic Q8.cpp -o Q8
+    ./Q8
+
+Q9:
+    g++ -std=c++17 -O2 -Wall -Wextra -pedantic Q9.cpp -o Q9
+    ./Q9
+
+Each compilation command creates an executable for the corresponding
+question. Run the executable and provide input through standard input
+according to that question's specified input format.
+
+To provide input from a file, use the following format:
+
+    ./Q1 < input.txt
+
+Replace Q1 with the appropriate executable name.
+
+
+
+
 Q9 (b): Kronecker Product and Its Connection to FFT
 ===================================================
 
 (i) Feasibility of Explicit Output in O(n log n) Time
 -----------------------------------------------------
 
-The claim is impossible.
+The claim is false.
 
 For two n-dimensional vectors u and v, their Kronecker product z is defined by:
 
